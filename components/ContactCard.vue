@@ -1,5 +1,9 @@
 <template>
-  <div class="contact-card">
+  <div
+    class="contact-card"
+    @click="setCurrentChat(chat.id)"
+    :class="{ active: currentChat && currentChat.id === chat.id }"
+  >
     <div class="circle-avatar">
       <div class="notification">99</div>
       <div class="avatar">
@@ -18,25 +22,29 @@
       </div>
     </div>
 
-    <div class="time">
-      52m
+    <div class="time" v-if="lastMessage">
+      {{ lastMessage.created | dateTime }}
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data: () => ({
     currentUserId: '1',
     contact: null,
     lastMessage: null,
   }),
-  props: ['chat'],
+  props: ['chat', 'currentChat'],
   mounted() {
     this.contact = this.chat.people.find(
       (contact) => contact.id !== this.currentUserId
     )
     this.lastMessage = this.chat.messages.slice(-1)[0]
+  },
+  methods: {
+    ...mapActions(['setCurrentChat']),
   },
 }
 </script>

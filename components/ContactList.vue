@@ -1,12 +1,17 @@
 <template>
   <div class="contact-list">
-    <ContactCard v-for="chat in chats" :key="chat.id" :chat="chat" />
+    <ContactCard
+      v-for="chat in chats"
+      :key="chat.id"
+      :chat="chat"
+      :currentChat="currentChat"
+    />
   </div>
 </template>
 
 <script>
 export default {
-  props: ['chats'],
+  props: ['chats', 'currentChat'],
 }
 </script>
 

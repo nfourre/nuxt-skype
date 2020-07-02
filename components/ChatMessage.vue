@@ -1,5 +1,8 @@
 <template>
-  <div class="chat-message">
+  <div
+    class="chat-message"
+    :class="{ mine: message.senderId === currentUserId }"
+  >
     <div class="message-wrapper">
       <div class="circle-avatar">
         <div class="avatar">
@@ -7,20 +10,22 @@
         </div>
       </div>
       <div class="message-content">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias illo
-        obcaecati modi pariatur repellat dolore, porro incidunt quo eius,
-        numquam dicta minima fugit, omnis nobis voluptas inventore atque
-        consequatur eveniet!
+        {{ message.content }}
       </div>
     </div>
     <div class="time">
-      12:54
+      {{ message.created | dateTime('human') }}
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data: () => ({
+    currentUserId: '1',
+  }),
+  props: ['message'],
+}
 </script>
 
 <style scoped>

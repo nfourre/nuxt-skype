@@ -2,7 +2,7 @@
   <div class="chat-app">
     <div class="contact">
       <ContactHeader />
-      <ContactList :chats="chats" />
+      <ContactList :chats="chats" :currentChat="currentChat" />
     </div>
     <div class="chat">
       <ChatHeader />
@@ -13,21 +13,32 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import { fireDb } from '~/plugins/firebase'
 export default {
-  data: () => ({
-    chats: [],
-  }),
+  computed: {
+    ...mapGetters(['chats', 'currentChat']),
+  },
   mounted() {
     fireDb.collection('chats').onSnapshot((snapshot) => {
       let chats = []
-      console.log(snapshot)
       snapshot.docChanges().forEach((change) => {
-        const chat = { id: change.doc.id, ...change.doc.data() }
-        chats = [...chats, chat]
-        this.chats = chats
+        console.log(change)
+        if (change.type === 'added') {
+          const chat = { id: change.doc.id, ...change.doc.data() }
+          chats = [...chats, chat]
+          this.updateChats(chats)
+        }
+
+        if (change.type === 'modified') {
+          const updatedChat = { id: change.doc.id, ...change.doc.data() }
+          this.updateChat(updatedChat)
+        }
       })
     })
+  },
+  methods: {
+    ...mapActions(['updateChats', 'updateChat']),
   },
 }
 </script>

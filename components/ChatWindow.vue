@@ -1,11 +1,20 @@
 <template>
-  <div class="chat-window">
-    <ChatMessage />
+  <div class="chat-window" v-if="currentChat">
+    <ChatMessage
+      v-for="message in currentChat.messages"
+      :key="message.created.seconds"
+      :message="message"
+    />
   </div>
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['currentChat']),
+  },
+}
 </script>
 
 <style>
