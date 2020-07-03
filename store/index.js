@@ -14,7 +14,9 @@ export const mutations = {
   updateChats(state, payload) {
     state.chats = [...payload]
     if (state.currentChat === null) {
-      state.currentChat = { ...state.chats[0] }
+      const sortedMessages = [...state.chats[0].messages]
+      sortedMessages.sort((a, b) => b.created.seconds - a.created.seconds)
+      state.currentChat = { ...state.chats[0], messages: sortedMessages }
     }
   },
   updateChat(state, payload) {
@@ -28,9 +30,14 @@ export const mutations = {
     state.currentChat = {
       ...state.chats.find((chat) => chat.id === payload),
     }
+    state.currentChat.messages.sort(
+      (a, b) => b.created.seconds - a.created.seconds
+    )
   },
   updateCurrentChat(state, payload) {
-    state.currentChat = payload
+    const sortedMessages = [...payload.messages]
+    sortedMessages.sort((a, b) => b.created.seconds - a.created.seconds)
+    state.currentChat = { ...payload, messages: sortedMessages }
   },
 }
 

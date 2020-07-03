@@ -7,7 +7,7 @@ moment.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
     past: '%s ago',
-    s: '%ss',
+    s: '1s',
     ss: '%ss',
     m: '%dm',
     mm: '%dm',

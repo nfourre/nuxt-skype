@@ -20,6 +20,7 @@ export default {
     checkMessage() {
       if (this.message !== null || this.message !== '') {
         this.sendMessage(this.message)
+        this.message = ''
       }
     },
   },

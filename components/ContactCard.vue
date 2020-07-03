@@ -43,6 +43,11 @@ export default {
     )
     this.lastMessage = this.chat.messages.slice(-1)[0]
   },
+  watch: {
+    chat(newValue, oldValue) {
+      this.lastMessage = newValue.messages.slice(-1)[0]
+    },
+  },
   methods: {
     ...mapActions(['setCurrentChat']),
   },
