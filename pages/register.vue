@@ -14,9 +14,41 @@
             class="email"
             placeholder=""
             aria-label="email"
-            v-model="credentials.email"
+            v-model="register.email"
           />
-          <p v-if="errors.emptyEmail" class="error">
+          <p v-if="errors.includes('email')" class="error">
+            Ce champ est obligatoire
+          </p>
+        </div>
+        <div class="field">
+          <label class="label" for="firstname">
+            Firstname
+          </label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            class="firstname"
+            placeholder=""
+            v-model="register.firstname"
+          />
+          <p v-if="errors.includes('firstname')" class="error">
+            Ce champ est obligatoire
+          </p>
+        </div>
+        <div class="field">
+          <label class="label" for="lastname">
+            Lastname
+          </label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            class="lastname"
+            placeholder=""
+            v-model="register.lastname"
+          />
+          <p v-if="errors.includes('lastname')" class="error">
             Ce champ est obligatoire
           </p>
         </div>
@@ -31,16 +63,34 @@
             class="password"
             placeholder=""
             aria-label="password"
-            v-model="credentials.password"
+            v-model="register.password"
           />
-          <p v-if="errors.emptyPassword" class="error">
+          <p v-if="errors.includes('password')" class="error">
             Ce champ est obligatoire
+          </p>
+        </div>
+        <div class="field">
+          <label class="label" for="confirmPassword">
+            Confirm password
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            class="password"
+            placeholder=""
+            v-model="register.confirmPassword"
+          />
+          <p v-if="errors.includes('confirmPassword')" class="error">
+            Ce champ est obligatoire
+          </p>
+          <p v-if="errors.includes('notSamePassword')" class="error">
+            Les mot de passe ne sont pas identiques
           </p>
         </div>
         <button class="button" type="submit">Se connecter</button>
       </form>
     </div>
-    <a @click="goToRegister">Create an account</a>
   </div>
 </template>
 
@@ -48,42 +98,34 @@
 import { mapActions } from 'vuex'
 export default {
   data: () => ({
-    credentials: {
-      email: null,
-      password: null,
+    register: {
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      confirmPassword: '',
     },
-    errors: {
-      emptyEmail: false,
-      emptyPassword: false,
-    },
+    errors: [],
   }),
   methods: {
-    ...mapActions(['login']),
+    ...mapActions(['sigin']),
     checkForm(event) {
       event.preventDefault()
-      if (this.credentials.email === null || this.credentials.email === '') {
-        this.errors.emptyEmail = true
-      } else {
-        this.errors.emptyEmail = false
-      }
-      if (
-        this.credentials.password === null ||
-        this.credentials.password === ''
-      ) {
-        this.errors.emptyPassword = true
-      } else {
-        this.errors.emptyPassword = false
-      }
+      this.errors = []
+      this.register.email === '' ? this.errors.push('email') : null
+      this.register.firstname === '' ? this.errors.push('firstname') : null
+      this.register.lastname === '' ? this.errors.push('lastname') : null
+      this.register.password === '' ? this.errors.push('password') : null
+      this.register.confirmPassword === ''
+        ? this.errors.push('confirmPassword')
+        : null
+      this.register.password !== this.register.confirmPassword
+        ? this.errors.push('notSamePassword')
+        : null
 
-      if (
-        this.errors.emptyPassword === false &&
-        this.errors.emptyEmail === false
-      ) {
-        this.login(this.credentials)
+      if (this.errors.length === 0) {
+        this.sigin(this.register)
       }
-    },
-    goToRegister() {
-      this.$router.push('/register')
     },
   },
 }
@@ -96,7 +138,6 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,18 +146,18 @@ export default {
 
 .login-modale {
   width: 450px;
-  height: 350px;
+  height: 640px;
   display: flex;
   border: 1px solid #3b3a9e;
   display: flex;
   flex-direction: row;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .login-side {
   width: 150px;
-  height: 350px;
+  height: 640px;
   background: #3b3a9e;
 }
 

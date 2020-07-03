@@ -1,7 +1,7 @@
 <template>
   <div class="contact-header">
-    <span class="back material-icons">
-      keyboard_arrow_left
+    <span class="back material-icons" @click="logout">
+      exit_to_app
     </span>
     <img class="logo" src="~/assets/logo.png" alt="Skype" />
     <span class="back material-icons">
@@ -11,7 +11,12 @@
 </template>
 
 <script>
-export default {}
+import { mapActions } from 'vuex'
+export default {
+  methods: {
+    ...mapActions(['logout']),
+  },
+}
 </script>
 
 <style scoped>

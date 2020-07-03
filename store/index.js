@@ -100,4 +100,34 @@ export const actions = {
       console.log('bad credentials')
     }
   },
+  logout({ commit }) {
+    try {
+      fireAuth.signOut()
+      commit('setCurrentUser', null)
+      this.$router.push('/')
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async sigin({ commit }, payload) {
+    try {
+      const userCredential = await fireAuth.createUserWithEmailAndPassword(
+        payload.email,
+        payload.password
+      )
+      const userAuthId = userCredential.user.uid
+      const newUser = {
+        authId: userAuthId,
+        mail: payload.email,
+        firstname: payload.firstname,
+        lastname: payload.lastname,
+      }
+      const registeredUser = await fireDb.collection('users').add(newUser)
+      const user = await registeredUser.get()
+      commit('setCurrentUser', user.data())
+      this.$router.push('/home')
+    } catch (error) {
+      console.log(error)
+    }
+  },
 }

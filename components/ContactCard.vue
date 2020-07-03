@@ -37,6 +37,11 @@ export default {
   }),
   props: ['chat', 'currentChat', 'currentUser'],
   mounted() {
+    if (this.currentUser) {
+      this.contact = this.chat.people.find(
+        (contact) => contact.id !== this.currentUser.authId
+      )
+    }
     this.lastMessage = this.chat.messages.slice(-1)[0]
   },
   watch: {
