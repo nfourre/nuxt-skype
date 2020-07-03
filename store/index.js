@@ -74,6 +74,14 @@ export const actions = {
     commit('updateCurrentChat', payload)
     commit('updateChat', payload)
   },
+  async autoLogin({ commit }, payload) {
+    console.log(payload)
+    const loggedUser = await fireDb
+      .collection('users')
+      .where('authId', '==', payload)
+      .get()
+    commit('setCurrentUser', loggedUser.docs[0].data())
+  },
   async login({ commit }, payload) {
     try {
       const authUser = await fireAuth.signInWithEmailAndPassword(

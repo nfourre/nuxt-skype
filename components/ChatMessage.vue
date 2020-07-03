@@ -1,7 +1,7 @@
 <template>
   <div
     class="chat-message"
-    :class="{ mine: message.senderId === currentUser.authId }"
+    :class="{ mine: currentUser && message.senderId === currentUser.authId }"
   >
     <div class="message-wrapper">
       <div class="circle-avatar">

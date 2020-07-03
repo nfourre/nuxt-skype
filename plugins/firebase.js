@@ -17,4 +17,12 @@ if (!firebase.apps.length) {
 const fireDb = firebase.firestore()
 const fireAuth = firebase.auth()
 
+export default (context, inject) => {
+  fireAuth.onAuthStateChanged((user) => {
+    if (user) {
+      context.store.dispatch('autoLogin', user.uid)
+    }
+  })
+}
+
 export { fireDb, fireAuth }
