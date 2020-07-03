@@ -5,13 +5,14 @@
       :key="chat.id"
       :chat="chat"
       :currentChat="currentChat"
+      :currentUser="currentUser"
     />
   </div>
 </template>
 
 <script>
 export default {
-  props: ['chats', 'currentChat'],
+  props: ['chats', 'currentChat', 'currentUser'],
 }
 </script>
 

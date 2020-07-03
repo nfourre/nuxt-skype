@@ -2,7 +2,11 @@
   <div class="chat-app">
     <div class="contact">
       <ContactHeader />
-      <ContactList :chats="chats" :currentChat="currentChat" />
+      <ContactList
+        :chats="chats"
+        :currentChat="currentChat"
+        :currentUser="currentUser"
+      />
     </div>
     <div class="chat">
       <ChatHeader />
@@ -17,7 +21,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { fireDb } from '~/plugins/firebase'
 export default {
   computed: {
-    ...mapGetters(['chats', 'currentChat']),
+    ...mapGetters(['chats', 'currentChat', 'currentUser']),
   },
   mounted() {
     fireDb.collection('chats').onSnapshot((snapshot) => {

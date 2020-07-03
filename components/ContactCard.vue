@@ -32,14 +32,13 @@
 import { mapActions } from 'vuex'
 export default {
   data: () => ({
-    currentUserId: '1',
     contact: null,
     lastMessage: null,
   }),
-  props: ['chat', 'currentChat'],
+  props: ['chat', 'currentChat', 'currentUser'],
   mounted() {
     this.contact = this.chat.people.find(
-      (contact) => contact.id !== this.currentUserId
+      (contact) => contact.id !== this.currentUser.authId
     )
     this.lastMessage = this.chat.messages.slice(-1)[0]
   },

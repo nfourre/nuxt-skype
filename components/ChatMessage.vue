@@ -1,7 +1,7 @@
 <template>
   <div
     class="chat-message"
-    :class="{ mine: message.senderId === currentUserId }"
+    :class="{ mine: message.senderId === currentUser.authId }"
   >
     <div class="message-wrapper">
       <div class="circle-avatar">
@@ -21,10 +21,7 @@
 
 <script>
 export default {
-  data: () => ({
-    currentUserId: '1',
-  }),
-  props: ['message'],
+  props: ['message', 'currentUser'],
 }
 </script>
 

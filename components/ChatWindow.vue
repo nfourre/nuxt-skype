@@ -4,6 +4,7 @@
       v-for="message in currentChat.messages"
       :key="message.created.seconds"
       :message="message"
+      :currentUser="currentUser"
     />
   </div>
 </template>
@@ -15,7 +16,7 @@ export default {
     sortedMessages: [],
   }),
   computed: {
-    ...mapGetters(['currentChat']),
+    ...mapGetters(['currentChat', 'currentUser']),
   },
 }
 </script>

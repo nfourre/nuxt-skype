@@ -1,13 +1,15 @@
-import { fireDb } from '~/plugins/firebase'
+import { fireDb, fireAuth } from '~/plugins/firebase'
 
 export const state = () => ({
   chats: [],
   currentChat: null,
+  currentUser: null,
 })
 
 export const getters = {
   chats: (state) => state.chats,
   currentChat: (state) => state.currentChat,
+  currentUser: (state) => state.currentUser,
 }
 
 export const mutations = {
@@ -39,6 +41,9 @@ export const mutations = {
     sortedMessages.sort((a, b) => b.created.seconds - a.created.seconds)
     state.currentChat = { ...payload, messages: sortedMessages }
   },
+  setCurrentUser(state, payload) {
+    state.currentUser = payload
+  },
 }
 
 export const actions = {
@@ -52,7 +57,7 @@ export const actions = {
     const newMessage = {
       content: payload,
       created: new Date(),
-      senderId: '1',
+      senderId: this.state.currentUser.authId,
     }
 
     const messages = [...this.state.currentChat.messages, newMessage]
@@ -68,5 +73,23 @@ export const actions = {
   updateChat({ commit }, payload) {
     commit('updateCurrentChat', payload)
     commit('updateChat', payload)
+  },
+  async login({ commit }, payload) {
+    try {
+      const authUser = await fireAuth.signInWithEmailAndPassword(
+        payload.email,
+        payload.password
+      )
+
+      const loggedUser = await fireDb
+        .collection('users')
+        .where('authId', '==', fireAuth.currentUser.uid)
+        .get()
+
+      commit('setCurrentUser', loggedUser.docs[0].data())
+      this.$router.push('/home')
+    } catch (error) {
+      console.log('bad credentials')
+    }
   },
 }
